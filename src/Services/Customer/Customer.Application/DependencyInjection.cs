@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Customer.Application.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Customer.Application
 {
@@ -6,7 +7,7 @@ namespace Customer.Application
     {
         public static void AddApplication(this IServiceCollection services)
         {
-
+            services.AddScoped<ICustomerService, CustomerService>();
         }
     }
 }
