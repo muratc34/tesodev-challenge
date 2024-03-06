@@ -9,7 +9,9 @@ namespace Order.Domain.Entities
         public int Quantity { get; set; }
         public double Price { get; set; }
         public Status Status { get; set; }
-        public Product Product { get; set; }
+        public Guid ProductId { get; set; }
+        public Product? Product { get; set; }
+        public Guid AddressId { get; set; }
         public Address Address { get; set; }
     }
 }

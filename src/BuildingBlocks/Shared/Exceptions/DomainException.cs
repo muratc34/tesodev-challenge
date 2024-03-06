@@ -1,5 +1,4 @@
-﻿
-using Shared.Core.Primitives;
+﻿using Shared.Core.Primitives;
 
 namespace Shared.Exceptions
 {

@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System.Net;
-using System.Text.Json;
-using Shared.Exceptions;
-using Shared.Errors;
 using Shared.Contracts;
 using Shared.Core.Primitives;
+using Shared.Errors;
+using Shared.Exceptions;
+using System.Net;
+using System.Text.Json;
 
 namespace Shared.Middleware
 {
@@ -45,7 +45,6 @@ namespace Shared.Middleware
             };
 
             string response = JsonSerializer.Serialize(new ApiErrorResponse(errors), serializerOptions);
-
             await httpContext.Response.WriteAsync(response);
         }
 

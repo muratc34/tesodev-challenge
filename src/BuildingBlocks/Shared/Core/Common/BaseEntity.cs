@@ -5,7 +5,7 @@
         public BaseEntity()
         {
             Id = Guid.NewGuid();
-            CreatedAt = DateTime.Now;
+            CreatedAt = DateTime.UtcNow;
         }
         public Guid Id { get; set; }
         public DateTime CreatedAt { get; set; }
