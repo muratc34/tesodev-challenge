@@ -14,5 +14,10 @@ namespace Shared.Errors
         {
             public static Error NotExist => new Error("Customer.NotExist", "The customer is not exist.");
         }
+
+        public static class Address
+        {
+            public static Error NotExist => new Error("Address.NotExist", "The address is not exist.");
+        }
     }
 }

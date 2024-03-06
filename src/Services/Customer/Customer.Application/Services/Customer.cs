@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Customer.Domain.DTOs;
 using Customer.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Shared.Core.Primitives.Result;
 using Shared.Core.Repositories;
 using Shared.Errors;
@@ -43,26 +44,36 @@ namespace Customer.Application.Services
 
         public async Task<Result<bool>> DeleteCustomer(Guid customerId)
         {
-            var existData = await _customerRepository.GetAsync(c => c.Id == customerId);
-            if (existData is null)
+            var customer = await _customerRepository.GetAsync(c => c.Id == customerId);
+            if (customer is null)
                 return Result<bool>.Failure(ErrorMessages.Customer.NotExist, false);
+            await _customerRepository.DeleteAsync(customer);
 
-            await _customerRepository.DeleteAsync(existData);
+            var address = await _addressRepository.GetAsync(a => a.Id == customer.AddressId);
+            if (address is null)
+                return Result<bool>.Failure(ErrorMessages.Customer.NotExist, false);
+            await _addressRepository.DeleteAsync(address);
+            
             return Result<bool>.Success(true);
         }
 
         public async Task<Result<List<CustomerDetailDto>>> Get(CancellationToken cancellationToken)
         {
-            var customers = await _customerRepository.GetAllAsync(cancellationToken);
-            var listData = _mapper.Map<List<CustomerDetailDto>>(customers);
-            return Result<List<CustomerDetailDto>>.Success(listData);
+            var customers = await _customerRepository.GetAllAsync(cancellationToken, null, c => c.Include(x => x.Address));
+            var data = new List<CustomerDetailDto>();
+            foreach(var customer in customers)
+            {
+                var entity = _mapper.Map<CustomerDetailDto>(customer);
+                data.Add(entity);
+            }
+            return Result<List<CustomerDetailDto>>.Success(data);
         }
 
         public async Task<Result<CustomerDetailDto>> Get(Guid customerId)
         {
-            var data = await _customerRepository.GetAsync(c => c.Id == customerId);
+            var data = await _customerRepository.GetAsync(c => c.Id == customerId,  c => c.Include(x => x.Address));
             var mapData = _mapper.Map<CustomerDetailDto>(data);
-            if(data is null)
+            if (data is null)
                 return Result<CustomerDetailDto>.Failure(ErrorMessages.Customer.NotExist, mapData);
             return Result<CustomerDetailDto>.Success(mapData);
         }

@@ -8,7 +8,8 @@ namespace Customer.Domain.Mapper
         public CustomerProfile()
         {
             CreateMap<Entities.Customer, CustomerDetailDto>().ReverseMap();
-            CreateMap<Entities.Customer, CustomerCreateDto>().ReverseMap().ForMember(x => x.Address, opt => opt.Ignore());
+            CreateMap<Entities.Customer, CustomerCreateDto>().ReverseMap()
+                .ForMember(x => x.Address, opt => opt.Ignore());
         }
     }
 }

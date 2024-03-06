@@ -1,6 +1,6 @@
-using Shared.Middleware;
 using Customer.Application;
 using Customer.Infrastructure;
+using Shared.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
