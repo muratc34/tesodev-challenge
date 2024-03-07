@@ -1,6 +1,8 @@
 ﻿using Customer.Application.Services;
 using Customer.Domain.DTOs;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using ValidationException = Shared.Exceptions.ValidationException;
 
 namespace Customer.API.Controllers
 {
@@ -9,10 +11,16 @@ namespace Customer.API.Controllers
     public class CustomerController : ControllerBase
     {
         readonly ICustomerService _customerService;
+        readonly IValidator<CustomerCreateDto> _customerValidator;
+        readonly IValidator<AddressCreateDto> _addressValidator;
 
-        public CustomerController(ICustomerService customerService)
+        public CustomerController(ICustomerService customerService, 
+            IValidator<CustomerCreateDto> customerValidator,
+            IValidator<AddressCreateDto> addressValidator)
         {
             _customerService = customerService;
+            _customerValidator = customerValidator;
+            _addressValidator = addressValidator;
         }
 
         [HttpGet]
@@ -26,12 +34,32 @@ namespace Customer.API.Controllers
 
         [HttpPost]
         public async Task<ActionResult<Guid>> Add(CustomerCreateDto customerDto)
-            => Ok(await _customerService.CreateCustomer(customerDto));
+        {
+            var address = _addressValidator.Validate(customerDto.Address);
+            if (!address.IsValid)
+                throw new ValidationException(address.Errors);
+
+            var customer = _customerValidator.Validate(customerDto);
+            if (!customer.IsValid)
+                throw new ValidationException(customer.Errors);
+
+            return Ok(await _customerService.CreateCustomer(customerDto));
+        }
 
         [HttpPut]
         [Route("{customerId}")]
-        public async Task<ActionResult<bool>> Update(Domain.Entities.Customer customer)
-            => Ok(await _customerService.UpdateCustomer(customer));
+        public async Task<ActionResult<bool>> Update(Guid customerId, CustomerCreateDto customerDto)
+        {
+            var address = _addressValidator.Validate(customerDto.Address);
+            if (!address.IsValid)
+                throw new ValidationException(address.Errors);
+
+            var customer = _customerValidator.Validate(customerDto);
+            if (!customer.IsValid)
+                throw new ValidationException(customer.Errors);
+
+            return Ok(await _customerService.UpdateCustomer(customerId, customerDto));
+        }
 
         [HttpDelete]
         [Route("{customerId}")]

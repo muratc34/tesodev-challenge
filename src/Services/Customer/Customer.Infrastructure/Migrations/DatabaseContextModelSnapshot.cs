@@ -73,7 +73,8 @@ namespace Customer.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
+                    b.HasIndex("AddressId")
+                        .IsUnique();
 
                     b.ToTable("Customers", (string)null);
                 });
@@ -81,12 +82,17 @@ namespace Customer.Infrastructure.Migrations
             modelBuilder.Entity("Customer.Domain.Entities.Customer", b =>
                 {
                     b.HasOne("Customer.Domain.Entities.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
+                        .WithOne("Customer")
+                        .HasForeignKey("Customer.Domain.Entities.Customer", "AddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Address");
+                });
+
+            modelBuilder.Entity("Customer.Domain.Entities.Address", b =>
+                {
+                    b.Navigation("Customer");
                 });
 #pragma warning restore 612, 618
         }

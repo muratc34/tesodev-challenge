@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using Customer.Application.ValidationRules;
 using Customer.Domain.DTOs;
-using Customer.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Shared.Core.Primitives.Result;
 using Shared.Core.Repositories;
@@ -12,7 +12,7 @@ namespace Customer.Application.Services
     {
         Task<Result<Guid>> CreateCustomer(CustomerCreateDto customerDto);
         Task<Result<bool>> DeleteCustomer(Guid customerId);
-        Task<Result<bool>> UpdateCustomer(Domain.Entities.Customer customer);
+        Task<Result<bool>> UpdateCustomer(Guid id, CustomerCreateDto customerDto);
         Task<Result<List<CustomerDetailDto>>> Get(CancellationToken cancellationToken);
         Task<Result<CustomerDetailDto>> Get(Guid customerId);
         Task<Result<bool>> Validate(Guid customerId);
@@ -21,10 +21,10 @@ namespace Customer.Application.Services
     public sealed class CustomerService : ICustomerService
     {
         readonly IRepository<Domain.Entities.Customer> _customerRepository;
-        readonly IRepository<Address> _addressRepository;
+        readonly IRepository<Domain.Entities.Address> _addressRepository;
         readonly IMapper _mapper;
 
-        public CustomerService(IRepository<Domain.Entities.Customer> customerRepository, IRepository<Address> addressRepository, IMapper mapper)
+        public CustomerService(IRepository<Domain.Entities.Customer> customerRepository, IRepository<Domain.Entities.Address> addressRepository, IMapper mapper)
         {
             _customerRepository = customerRepository;
             _addressRepository = addressRepository;
@@ -33,7 +33,7 @@ namespace Customer.Application.Services
 
         public async Task<Result<Guid>> CreateCustomer(CustomerCreateDto customerDto)
         {
-            var address = _mapper.Map<Address>(customerDto.Address);
+            var address = _mapper.Map<Domain.Entities.Address>(customerDto.Address);
             await _addressRepository.CreateAsync(address);
             
             var data = _mapper.Map<Domain.Entities.Customer>(customerDto);
@@ -78,12 +78,26 @@ namespace Customer.Application.Services
             return Result<CustomerDetailDto>.Success(mapData);
         }
 
-        public async Task<Result<bool>> UpdateCustomer(Domain.Entities.Customer customer)
+        public async Task<Result<bool>> UpdateCustomer(Guid customerId, CustomerCreateDto customerDto)
         {
-            var existData = await _customerRepository.GetAsync(c => c.Id == customer.Id);
+            var existData = await _customerRepository.GetAsync(c => c.Id == customerId);
             if (existData is null)
                 return Result<bool>.Failure(ErrorMessages.Customer.NotExist, false);
-            await _customerRepository.UpdateAsync(customer);
+
+            existData.Email = customerDto.Email;
+            existData.Name = customerDto.Name;
+
+            if (existData.Address is not null)
+            {
+                existData.Address.AddressLine = customerDto.Address.AddressLine;
+                existData.Address.City = customerDto.Address.City;
+                existData.Address.Country = customerDto.Address.Country;
+                existData.Address.CityCode = customerDto.Address.CityCode;
+                existData.UpdatedAt = DateTime.UtcNow;
+            }
+
+            await _customerRepository.UpdateAsync(existData);
+
             return Result<bool>.Success(true);
         }
          
