@@ -11,7 +11,6 @@ namespace Order.Application.Core.Behaviours
 
         public ValidationBehaviour(IEnumerable<IValidator<TRequest>> validators) => _validators = validators;
 
-
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             var failures = _validators
@@ -22,7 +21,7 @@ namespace Order.Application.Core.Behaviours
 
             if (failures.Any())
             {
-                throw new ValidationException(failures);
+                throw new Shared.Exceptions.ValidationException(failures);
             }
 
             return await next();

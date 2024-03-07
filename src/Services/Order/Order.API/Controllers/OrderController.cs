@@ -5,6 +5,9 @@ using Order.Application.Orders.Commands.DeleteOrder;
 using Order.Application.Orders.Commands.UpdateOrder;
 using Order.Application.Orders.Queries.GetOrderById;
 using Order.Application.Orders.Queries.GetOrders;
+using Order.Application.Orders.Queries.GetOrdersByCustomerId;
+using Shared.Contracts;
+using Shared.Core.Primitives.Result;
 
 namespace Order.API.Controllers
 {
@@ -20,6 +23,8 @@ namespace Order.API.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(Result<Guid>),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateOrder(CreateOrderCommand command)
         {
             var result = await _sender.Send(command);
@@ -27,6 +32,8 @@ namespace Order.API.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(Result<List<GetOrdersResponse>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetOrders(CancellationToken cancellationToken)
         {
             var result = await _sender.Send(new GetOrdersQuery(), cancellationToken);
@@ -35,6 +42,8 @@ namespace Order.API.Controllers
 
         [HttpGet]
         [Route("{orderId}")]
+        [ProducesResponseType(typeof(Result<List<GetOrderByIdResponse>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetOrderById(Guid orderId)
         {
             var query = new GetOrderByIdQuery(orderId);
@@ -44,6 +53,8 @@ namespace Order.API.Controllers
 
         [HttpGet]
         [Route("{customerId}")]
+        [ProducesResponseType(typeof(Result<List<GetOrderByCustomerIdResponse>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetOrderByCustomerId(Guid customerId)
         {
             var query = new GetOrderByIdQuery(customerId);
@@ -53,6 +64,8 @@ namespace Order.API.Controllers
 
         [HttpDelete]
         [Route("{orderId}")]
+        [ProducesResponseType(typeof(Result<bool>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteOrder(Guid orderId)
         {
             var command = new DeleteOrderCommand(orderId);
@@ -62,6 +75,8 @@ namespace Order.API.Controllers
 
         [HttpPut]
         [Route("{orderId}")]
+        [ProducesResponseType(typeof(Result<bool>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateOrder(UpdateOrderCommand command)
         {
             var result = await _sender.Send(command);
