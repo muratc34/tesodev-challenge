@@ -21,7 +21,7 @@ namespace Order.Application.Orders.Queries.GetOrderById
             if(order is null)
                 return Result<GetOrderByIdResponse>.Failure(ErrorMessages.Order.NotExist, null);
 
-            var response = new GetOrderByIdResponse(order.Id, order.CreatedAt, order.UpdatedAt, order.CustomerId, order.Quantity, order.Price, order.Status, order.Products);
+            var response = new GetOrderByIdResponse(order.Id, order.CreatedAt, order.UpdatedAt, order.CustomerId, order.Quantity, order.Price, order.Status, order.Product);
             return Result<GetOrderByIdResponse>.Success(response);
         }
     }

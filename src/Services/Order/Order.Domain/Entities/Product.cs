@@ -4,10 +4,17 @@ namespace Order.Domain.Entities
 {
     public sealed class Product : IBaseEntity
     {
+        public Product() 
+        {
+        }
+        public Product(string imageUrl, string name)
+        {
+            Id = Guid.NewGuid();
+            Name = name;
+            ImageUrl = imageUrl;
+        }
         public Guid Id { get; set; }
-        public Guid OrderId { get; set; }
-        public Order? Order { get; set; }
         public string ImageUrl { get; set; }
-        public int Name { get; set; }
+        public string Name { get; set; }
     }
 }

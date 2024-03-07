@@ -19,6 +19,10 @@ namespace Order.Infrastructure.Configurations
             builder.Property(o => o.Status).IsRequired();
 
             builder.Property(o => o.CustomerId).IsRequired();
+
+            builder.HasOne(o => o.Product);
+
+            builder.HasOne(o => o.Address);
         }
     }
 }

@@ -11,5 +11,5 @@ namespace Order.Application.Orders.Queries.GetOrderById
         int Quantity, 
         double Price, 
         Status Status, 
-        List<Product>? Products);
+        Product Product);
 } 

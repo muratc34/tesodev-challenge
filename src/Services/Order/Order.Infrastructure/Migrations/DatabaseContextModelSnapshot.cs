@@ -22,10 +22,39 @@ namespace Order.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Order.Domain.Entities.Address", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AddressLine")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("CityCode")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Address");
+                });
+
             modelBuilder.Entity("Order.Domain.Entities.Order", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AddressId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -37,6 +66,9 @@ namespace Order.Infrastructure.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("double precision");
 
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
@@ -47,6 +79,10 @@ namespace Order.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Orders", (string)null);
                 });
@@ -61,33 +97,32 @@ namespace Order.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Name")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("Products", (string)null);
                 });
 
-            modelBuilder.Entity("Order.Domain.Entities.Product", b =>
-                {
-                    b.HasOne("Order.Domain.Entities.Order", "Order")
-                        .WithMany("Products")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-                });
-
             modelBuilder.Entity("Order.Domain.Entities.Order", b =>
                 {
-                    b.Navigation("Products");
+                    b.HasOne("Order.Domain.Entities.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Order.Domain.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+
+                    b.Navigation("Product");
                 });
 #pragma warning restore 612, 618
         }

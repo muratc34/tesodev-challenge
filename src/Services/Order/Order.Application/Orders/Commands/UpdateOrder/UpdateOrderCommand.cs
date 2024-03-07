@@ -1,5 +1,5 @@
 ﻿using Order.Application.Core.Messaging;
-using Order.Domain.Entities;
+using Order.Domain.DTOs;
 using Order.Domain.Enumerations;
 
 namespace Order.Application.Orders.Commands.UpdateOrder
@@ -9,5 +9,6 @@ namespace Order.Application.Orders.Commands.UpdateOrder
         int Quantity,
         double Price,
         Status Status,
-        List<Product>? Products) : ICommand<bool>;
+        AddressUpdateDto? Address,
+        ProductUpdateDto? Product) : ICommand<bool>;
 }

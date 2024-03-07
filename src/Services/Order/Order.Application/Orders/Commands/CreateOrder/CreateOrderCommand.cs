@@ -1,5 +1,5 @@
 ﻿using Order.Application.Core.Messaging;
-using Order.Domain.Entities;
+using Order.Domain.DTOs;
 using Order.Domain.Enumerations;
 
 namespace Order.Application.Orders.Commands.CreateOrder
@@ -8,6 +8,7 @@ namespace Order.Application.Orders.Commands.CreateOrder
         Guid CustomerId, 
         int Quantity, 
         double Price, 
-        Status Status, 
-        List<Product>? Products) : ICommand<Guid>;
+        Status Status,
+        AddressCreateDto? Address,
+        ProductCreateDto? Product) : ICommand<Guid>;
 }

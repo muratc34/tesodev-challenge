@@ -19,5 +19,10 @@ namespace Order.Application.Core.Errors
         {
             public static Error NotExist => new Error("Product.NotExist", "The product is not exist.");
         }
+
+        public static class Address
+        {
+            public static Error NotExist => new Error("Address.NotExist", "The address is not exist.");
+        }
     }
 }
