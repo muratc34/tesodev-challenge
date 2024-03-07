@@ -1,0 +1,34 @@
+{
+  "SwaggerEndPoints": [
+    {
+      "Key": "customer",
+      "KeyToPath": "customer",
+      "Config": [
+        {
+          "Name": "Customer API",
+          "Version": "v1",
+          "Url": "http://customer.api:80/swagger/v1/swagger.json"
+        }
+      ],
+      "HostOverride": null,
+      "TransformByOcelotConfig": true,
+      "RemoveUnusedComponentsFromScheme": true,
+      "TakeServersFromDownstreamService": false
+    },
+    {
+      "Key": "order",
+      "KeyToPath": "order",
+      "Config": [
+        {
+          "Name": "Order API",
+          "Version": "v1",
+          "Url": "http://order.api:80/swagger/v1/swagger.json"
+        }
+      ],
+      "HostOverride": null,
+      "TransformByOcelotConfig": true,
+      "RemoveUnusedComponentsFromScheme": true,
+      "TakeServersFromDownstreamService": false
+    }
+  ]
+}

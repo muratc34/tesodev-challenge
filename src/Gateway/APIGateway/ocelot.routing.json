@@ -1,0 +1,43 @@
+{
+  "Routes": [
+    {
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "customer.api",
+          "Port": 80
+        }
+      ],
+      "SwaggerKey": "customer",
+      "DownstreamPathTemplate": "/api/Customer",
+      "UpstreamPathTemplate": "/customer",
+      "UpstreamHttpMethod": [ "POST", "GET" ]
+    },
+    {
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "customer.api",
+          "Port": 80
+        }
+      ],
+      "SwaggerKey": "customer",
+      "DownstreamPathTemplate": "/api/Customer/{customerId}",
+      "UpstreamPathTemplate": "/customer/{customerId}",
+      "UpstreamHttpMethod": [ "PUT", "DELETE", "GET" ]
+    },
+    {
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "customer.api",
+          "Port": 80
+        }
+      ],
+      "SwaggerKey": "customer",
+      "DownstreamPathTemplate": "/api/Customer/validate/{customerId}",
+      "UpstreamPathTemplate": "/customer/validate/{customerId}",
+      "UpstreamHttpMethod": [ "GET" ]
+    }
+  ]
+}
