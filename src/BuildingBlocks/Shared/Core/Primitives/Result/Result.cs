@@ -2,35 +2,36 @@
 {
     public class Result
     {
-        public Result(bool isSuccess, Error error)
+        public Result(bool isSuccess)
         {
-            if (isSuccess && error != Error.None ||
-                !isSuccess && error == Error.None)
-            {
-                throw new ArgumentException("Invalid error", nameof(error));
-            }
-
             IsSuccess = isSuccess;
+        }
+
+        public Result(bool isSuccess, Error? error): this(isSuccess)
+        {
             Error = error;
         }
 
         public bool IsSuccess { get; }
-        public bool IsFailure => !IsSuccess;
-        public Error Error { get; }
-        public static Result Success() => new(true, Error.None);
+        public Error? Error { get; }
+        public static Result Success() => new(true);
         public static Result Failure(Error error) => new(false, error);
     }
 
     public class Result<T> : Result
     {
-        public Result(bool isSuccess, Error error, T data) : base(isSuccess, error)
+        public Result(T data, bool isSuccess) : base(isSuccess)
         {
             Data = data;
         }
-        public T Data { get; }
+        public Result(T? data, bool isSuccess, Error error) : base(isSuccess, error)
+        {
+            Data = data;
+        }
+        public T? Data { get; }
 
-        public static Result<T> Success(T data) => new(true, Error.None, data);
-        public static Result<T> Failure(Error error, T data) => new(false, error, data);
+        public static Result<T> Success(T data) => new(data, true);
+        public static Result<T> Failure(Error error, T? data) => new(data, true, error);
     }
 }
 

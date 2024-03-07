@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System.Net;
-using System.Text.Json;
-using Shared.Exceptions;
-using Shared.Errors;
 using Shared.Contracts;
 using Shared.Core.Primitives;
+using Shared.Errors;
+using Shared.Exceptions;
+using System.Net;
+using System.Text.Json;
 
 namespace Shared.Middleware
 {
-    internal class ExceptionHandlerMiddleware
+    public class ExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionHandlerMiddleware> _logger;
@@ -30,7 +30,6 @@ namespace Shared.Middleware
             {
                 _logger.LogError(exception, "An exception occured: {Message}", exception.Message);
                 await HandleExceptionAsync(httpContext, exception);
-
             }
         }
         private async static Task HandleExceptionAsync(HttpContext httpContext, Exception exception)
@@ -46,7 +45,6 @@ namespace Shared.Middleware
             };
 
             string response = JsonSerializer.Serialize(new ApiErrorResponse(errors), serializerOptions);
-
             await httpContext.Response.WriteAsync(response);
         }
 
@@ -55,7 +53,7 @@ namespace Shared.Middleware
             {
                 ValidationException validationException => (HttpStatusCode.BadRequest, validationException.Errors),
                 DomainException domainException => (HttpStatusCode.BadRequest, new[] { domainException.Error }),
-                _ => (HttpStatusCode.InternalServerError, new[] { DomainErrors.General.ServerError })
+                _ => (HttpStatusCode.InternalServerError, new[] { ErrorMessages.General.ServerError, new Error("General", exception.Message)})
             };
     }
 }

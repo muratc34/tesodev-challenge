@@ -1,0 +1,61 @@
+﻿using Customer.Application.Services;
+using Customer.Domain.DTOs;
+using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
+using ValidationException = Shared.Exceptions.ValidationException;
+
+namespace Customer.API.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CustomerController : ControllerBase
+    {
+        readonly ICustomerService _customerService;
+
+        public CustomerController(ICustomerService customerService)
+        {
+            _customerService = customerService;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<CustomerDetailDto>>> Get(CancellationToken cancellationToken)
+            => Ok(await _customerService.Get(cancellationToken));
+
+        [HttpGet]
+        [Route("{customerId}")]
+        public async Task<ActionResult<CustomerDetailDto>> Get(Guid customerId)
+            => Ok(await _customerService.Get(customerId));
+
+        [HttpPost]
+        public async Task<ActionResult<Guid>> Add(CustomerCreateDto customerDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(await _customerService.CreateCustomer(customerDto));
+        }
+
+        [HttpPut]
+        [Route("{customerId}")]
+        public async Task<ActionResult<bool>> Update(Guid customerId, CustomerCreateDto customerDto)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(await _customerService.UpdateCustomer(customerId, customerDto));
+        }
+
+        [HttpDelete]
+        [Route("{customerId}")]
+        public async Task<ActionResult<bool>> Delete(Guid customerId)
+            => Ok(await _customerService.DeleteCustomer(customerId));
+
+        [HttpGet]
+        [Route("validate/{customerId}")]
+        public async Task<ActionResult<bool>> Validate(Guid customerId)
+            => Ok(await _customerService.Validate(customerId));
+    }
+}
