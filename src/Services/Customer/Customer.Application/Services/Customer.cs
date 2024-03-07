@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Customer.Application.ValidationRules;
 using Customer.Domain.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Shared.Core.Primitives.Result;

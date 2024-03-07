@@ -1,8 +1,6 @@
 ﻿using Customer.Application.Services;
 using Customer.Domain.DTOs;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using ValidationException = Shared.Exceptions.ValidationException;
 
 namespace Customer.API.Controllers
 {
