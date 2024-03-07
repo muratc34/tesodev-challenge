@@ -11,16 +11,10 @@ namespace Customer.API.Controllers
     public class CustomerController : ControllerBase
     {
         readonly ICustomerService _customerService;
-        readonly IValidator<CustomerCreateDto> _customerValidator;
-        readonly IValidator<AddressCreateDto> _addressValidator;
 
-        public CustomerController(ICustomerService customerService, 
-            IValidator<CustomerCreateDto> customerValidator,
-            IValidator<AddressCreateDto> addressValidator)
+        public CustomerController(ICustomerService customerService)
         {
             _customerService = customerService;
-            _customerValidator = customerValidator;
-            _addressValidator = addressValidator;
         }
 
         [HttpGet]
@@ -35,13 +29,8 @@ namespace Customer.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Guid>> Add(CustomerCreateDto customerDto)
         {
-            var address = _addressValidator.Validate(customerDto.Address);
-            if (!address.IsValid)
-                throw new ValidationException(address.Errors);
-
-            var customer = _customerValidator.Validate(customerDto);
-            if (!customer.IsValid)
-                throw new ValidationException(customer.Errors);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             return Ok(await _customerService.CreateCustomer(customerDto));
         }
@@ -50,13 +39,11 @@ namespace Customer.API.Controllers
         [Route("{customerId}")]
         public async Task<ActionResult<bool>> Update(Guid customerId, CustomerCreateDto customerDto)
         {
-            var address = _addressValidator.Validate(customerDto.Address);
-            if (!address.IsValid)
-                throw new ValidationException(address.Errors);
 
-            var customer = _customerValidator.Validate(customerDto);
-            if (!customer.IsValid)
-                throw new ValidationException(customer.Errors);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
             return Ok(await _customerService.UpdateCustomer(customerId, customerDto));
         }

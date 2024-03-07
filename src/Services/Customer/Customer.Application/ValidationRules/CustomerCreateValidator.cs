@@ -21,9 +21,21 @@ namespace Customer.Application.ValidationRules
                 .Matches(@"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$")
                 .WithMessage("The email format is invalid.");
 
-            RuleFor(x => x.Address)
+            RuleFor(x => x.Address.AddressLine)
                 .NotEmpty()
-                .WithMessage("The address id is required.");
+                .WithMessage("The address line is required");
+
+            RuleFor(x => x.Address.City)
+                .NotEmpty()
+                .WithMessage("The city is required");
+
+            RuleFor(x => x.Address.Country)
+                .NotEmpty()
+                .WithMessage("The country is required");
+
+            RuleFor(x => x.Address.CityCode)
+                .NotEmpty()
+                .WithMessage("The city code is required");
         }
     }
 }

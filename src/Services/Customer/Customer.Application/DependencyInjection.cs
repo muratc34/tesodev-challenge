@@ -1,7 +1,7 @@
 ﻿using Customer.Application.Services;
+using Customer.Application.ValidationRules;
+using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
-using FluentValidation;
-using System.Reflection;
 
 namespace Customer.Application
 {
@@ -9,7 +9,7 @@ namespace Customer.Application
     {
         public static void AddApplication(this IServiceCollection services)
         {
-            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CustomerCreateValidator>());
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<ICustomerService, CustomerService>();
         }
