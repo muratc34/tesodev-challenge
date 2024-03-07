@@ -1,17 +1,17 @@
-﻿using Customer.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Order.Domain.Entities;
 using System.Reflection;
 
-namespace Customer.Infrastructure
+namespace Order.Infrastructure
 {
-    public class DatabaseContext : DbContext
+    public sealed class DatabaseContext : DbContext
     {
         public DatabaseContext(DbContextOptions options) : base(options)
         {
         }
 
-        public DbSet<Address> Addresses { get; set; }
-        public DbSet<Domain.Entities.Customer> Customers { get; set; }
+        public DbSet<Product> Products{ get; set; }
+        public DbSet<Domain.Entities.Order> Orders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,8 +1,6 @@
-﻿using Shared.Core.Common;
-
-namespace Order.Domain.Entities
+﻿namespace Order.Domain.Contracts
 {
-    public sealed class Address : IBaseEntity
+    public sealed class Address
     {
         public Guid Id { get; set; }
         public string AddressLine { get; set; }

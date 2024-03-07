@@ -1,6 +1,6 @@
 ﻿using Shared.Core.Primitives;
 
-namespace Shared.Errors
+namespace Customer.Application.Core.Errors
 {
     public static class ErrorMessages
     {
