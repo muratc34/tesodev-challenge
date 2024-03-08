@@ -38,6 +38,58 @@
       "DownstreamPathTemplate": "/api/Customer/validate/{customerId}",
       "UpstreamPathTemplate": "/customer/validate/{customerId}",
       "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "order.api",
+          "Port": 80
+        }
+      ],
+      "SwaggerKey": "order",
+      "DownstreamPathTemplate": "/api/Order",
+      "UpstreamPathTemplate": "/order",
+      "UpstreamHttpMethod": [ "GET", "POST" ]
+    },
+    {
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "order.api",
+          "Port": 80
+        }
+      ],
+      "SwaggerKey": "order",
+      "DownstreamPathTemplate": "/api/Order/{orderId}",
+      "UpstreamPathTemplate": "/order/{orderId}",
+      "UpstreamHttpMethod": [ "GET", "DELETE", "PUT" ]
+    },
+    {
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "order.api",
+          "Port": 80
+        }
+      ],
+      "SwaggerKey": "order",
+      "DownstreamPathTemplate": "/api/Order/customer/{customerId}",
+      "UpstreamPathTemplate": "/order/customer/{customerId}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "order.api",
+          "Port": 80
+        }
+      ],
+      "SwaggerKey": "order",
+      "DownstreamPathTemplate": "/api/Order/{orderId}/changestatus",
+      "UpstreamPathTemplate": "/order/{orderId}/changestatus",
+      "UpstreamHttpMethod": [ "PUT" ]
     }
   ]
 }

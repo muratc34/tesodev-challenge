@@ -1,4 +1,6 @@
-﻿namespace Shared.Core.Primitives
+﻿using System.Text.Json.Serialization;
+
+namespace Shared.Core.Primitives
 {
     public sealed class Error
     {
@@ -8,7 +10,10 @@
             Message = message;
         }
 
+        [JsonPropertyName("code")]
         public string Code { get; }
+
+        [JsonPropertyName("message")]
         public string Message { get; }
     }
 }

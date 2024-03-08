@@ -1,8 +1,8 @@
 ﻿using Customer.Application.Services;
 using Customer.Domain.DTOs;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using ValidationException = Shared.Exceptions.ValidationException;
+using Shared.Contracts;
+using Shared.Core.Primitives.Result;
 
 namespace Customer.API.Controllers
 {
@@ -18,16 +18,20 @@ namespace Customer.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<CustomerDetailDto>>> Get(CancellationToken cancellationToken)
+        [ProducesResponseType(typeof(Result<List<CustomerDetailDto>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Get(CancellationToken cancellationToken)
             => Ok(await _customerService.Get(cancellationToken));
 
         [HttpGet]
         [Route("{customerId}")]
-        public async Task<ActionResult<CustomerDetailDto>> Get(Guid customerId)
+        [ProducesResponseType(typeof(Result<CustomerDetailDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Get(Guid customerId)
             => Ok(await _customerService.Get(customerId));
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Add(CustomerCreateDto customerDto)
+        [ProducesResponseType(typeof(Result<Guid>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Add(CustomerCreateDto customerDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -37,7 +41,9 @@ namespace Customer.API.Controllers
 
         [HttpPut]
         [Route("{customerId}")]
-        public async Task<ActionResult<bool>> Update(Guid customerId, CustomerCreateDto customerDto)
+        [ProducesResponseType(typeof(Result<bool>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Update(Guid customerId, CustomerCreateDto customerDto)
         {
 
             if (!ModelState.IsValid)
@@ -50,12 +56,14 @@ namespace Customer.API.Controllers
 
         [HttpDelete]
         [Route("{customerId}")]
-        public async Task<ActionResult<bool>> Delete(Guid customerId)
+        [ProducesResponseType(typeof(Result<bool>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Delete(Guid customerId)
             => Ok(await _customerService.DeleteCustomer(customerId));
 
         [HttpGet]
         [Route("validate/{customerId}")]
-        public async Task<ActionResult<bool>> Validate(Guid customerId)
+        [ProducesResponseType(typeof(Result<bool>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Validate(Guid customerId)
             => Ok(await _customerService.Validate(customerId));
     }
 }

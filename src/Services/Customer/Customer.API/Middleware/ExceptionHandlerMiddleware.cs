@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
+﻿using Customer.Application.Core.Errors;
 using Shared.Contracts;
 using Shared.Core.Primitives;
-using Shared.Errors;
 using Shared.Exceptions;
 using System.Net;
 using System.Text.Json;
 
-namespace Shared.Middleware
+namespace Customer.API.Middleware
 {
     public class ExceptionHandlerMiddleware
     {
@@ -53,7 +51,7 @@ namespace Shared.Middleware
             {
                 ValidationException validationException => (HttpStatusCode.BadRequest, validationException.Errors),
                 DomainException domainException => (HttpStatusCode.BadRequest, new[] { domainException.Error }),
-                _ => (HttpStatusCode.InternalServerError, new[] { ErrorMessages.General.ServerError, new Error("General", exception.Message)})
+                _ => (HttpStatusCode.InternalServerError, new[] { ErrorMessages.General.ServerError, new Error("General", exception.Message) })
             };
     }
 }

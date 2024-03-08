@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
-using Customer.Application.ValidationRules;
+using Customer.Application.Core.Errors;
 using Customer.Domain.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Shared.Core.Primitives.Result;
 using Shared.Core.Repositories;
-using Shared.Errors;
 
 namespace Customer.Application.Services
 {

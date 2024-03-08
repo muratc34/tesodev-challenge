@@ -1,6 +1,6 @@
 ﻿using Shared.Core.Primitives;
 
-namespace Shared.Errors
+namespace Order.Application.Core.Errors
 {
     public static class ErrorMessages
     {
@@ -10,9 +10,15 @@ namespace Shared.Errors
             public static Error ServerError => new Error("General.ServerError", "The server encountered an unrecoverable error.");
         }
 
-        public static class Customer
+        public static class Order
         {
-            public static Error NotExist => new Error("Customer.NotExist", "The customer is not exist.");
+            public static Error NotExist => new Error("Order.NotExist", "The order is not exist.");
+            public static Error StatusNotExist => new Error("Order.StatusNotExist", "The status is not exist.");
+        }
+
+        public static class Product
+        {
+            public static Error NotExist => new Error("Product.NotExist", "The product is not exist.");
         }
 
         public static class Address
