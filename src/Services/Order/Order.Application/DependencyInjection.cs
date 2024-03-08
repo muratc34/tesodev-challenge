@@ -10,6 +10,8 @@ namespace Order.Application
     {
         public static void AddApplication(this IServiceCollection services)
         {
+            services.AddHttpClient();
+
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             services.AddMediatR(Assembly.GetExecutingAssembly());

@@ -14,6 +14,8 @@ COPY . .
 WORKDIR "/src/src/Services/Order/Order.API"
 RUN dotnet build "./Order.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
+RUN dotnet ef database update
+
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./Order.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false

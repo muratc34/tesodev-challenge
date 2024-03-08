@@ -24,6 +24,6 @@ namespace Order.Domain.Entities
         public Guid AddressId { get; set; }
         public Address Address { get; set; }
         public Guid ProductId { get; set; }
-        public Product? Product { get; set; }
+        public Product Product { get; set; }
     }
 }

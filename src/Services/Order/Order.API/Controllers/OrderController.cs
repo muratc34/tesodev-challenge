@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Order.Application.Orders.Commands.ChangeOrderStatus;
 using Order.Application.Orders.Commands.CreateOrder;
 using Order.Application.Orders.Commands.DeleteOrder;
 using Order.Application.Orders.Commands.UpdateOrder;
@@ -8,6 +9,7 @@ using Order.Application.Orders.Queries.GetOrders;
 using Order.Application.Orders.Queries.GetOrdersByCustomerId;
 using Shared.Contracts;
 using Shared.Core.Primitives.Result;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Order.API.Controllers
 {
@@ -78,6 +80,16 @@ namespace Order.API.Controllers
         [ProducesResponseType(typeof(Result<bool>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateOrder(UpdateOrderCommand command)
+        {
+            var result = await _sender.Send(command);
+            return result.IsSuccess ? Ok(result) : BadRequest(result.Error);
+        }
+
+        [HttpPut]
+        [Route("{orderId}/changestatus")]
+        [ProducesResponseType(typeof(Result<bool>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> ChangeStatus(ChangeOrderStatusCommand command)
         {
             var result = await _sender.Send(command);
             return result.IsSuccess ? Ok(result) : BadRequest(result.Error);

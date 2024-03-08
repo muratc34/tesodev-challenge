@@ -18,6 +18,8 @@ COPY . .
 WORKDIR "/src/src/Services/Customer/Customer.API"
 RUN dotnet build "./Customer.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
+RUN dotnet ef database update 
+
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./Customer.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false

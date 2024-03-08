@@ -17,12 +17,21 @@ namespace Order.Application.Orders.Queries.GetOrders
 
         public async Task<Result<List<GetOrdersResponse>>> Handle(GetOrdersQuery request, CancellationToken cancellationToken)
         {
-            var orders = await _orderRepository.GetAllAsync(cancellationToken, null, o => o.Include(x => x.Product));
+            var orders = await _orderRepository.GetAllAsync(cancellationToken, null, o => o.Include(x => x.Product).Include(x => x.Address));
 
             var data = new List<GetOrdersResponse>();
             foreach (var order in orders)
             {
-                data.Add(new GetOrdersResponse(order.Id, order.CreatedAt, order.UpdatedAt, order.CustomerId, order.Quantity, order.Price, order.Status, order.Product));
+                data.Add(new GetOrdersResponse(
+                    order.Id, 
+                    order.CreatedAt, 
+                    order.UpdatedAt, 
+                    order.CustomerId, 
+                    order.Quantity, 
+                    order.Price, 
+                    order.Status, 
+                    order.Product,
+                    order.Address));
             }
 
             return Result<List<GetOrdersResponse>>.Success(data);
