@@ -5,7 +5,6 @@ using Order.Domain.Entities;
 using Shared.Core.Primitives.Result;
 using Shared.Core.Repositories;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 
 namespace Order.Application.Orders.Commands.CreateOrder
 {

@@ -54,7 +54,7 @@ namespace Order.API.Controllers
         }
 
         [HttpGet]
-        [Route("{customerId}")]
+        [Route("customer/{customerId}")]
         [ProducesResponseType(typeof(Result<List<GetOrderByCustomerIdResponse>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetOrderByCustomerId(Guid customerId)
