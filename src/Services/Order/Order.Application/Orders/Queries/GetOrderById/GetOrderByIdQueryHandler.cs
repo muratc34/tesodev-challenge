@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Order.Application.Core.Errors;
 using Order.Application.Core.Messaging;
+using Shared.Contracts;
 using Shared.Core.Primitives.Result;
 using Shared.Core.Repositories;
 
@@ -10,10 +12,12 @@ namespace Order.Application.Orders.Queries.GetOrderById
         : IQueryHandler<GetOrderByIdQuery, GetOrderByIdResponse>
     {
         private readonly IRepository<Domain.Entities.Order> _orderRepository;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public GetOrderByIdQueryHandler(IRepository<Domain.Entities.Order> orderRepository)
+        public GetOrderByIdQueryHandler(IRepository<Domain.Entities.Order> orderRepository, IPublishEndpoint publishEndpoint)
         {
             _orderRepository = orderRepository;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task<Result<GetOrderByIdResponse>> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
@@ -33,6 +37,14 @@ namespace Order.Application.Orders.Queries.GetOrderById
                 order.Product,
                 order.Address);
 
+            await _publishEndpoint.Publish(new AuditLogCreated
+            {
+                Id = Guid.NewGuid(),
+                OrderId = order.Id,
+                Action = Shared.Contracts.Action.Get,
+                Date = DateTime.UtcNow,
+                Message = "The order got by id."
+            });
             return Result<GetOrderByIdResponse>.Success(response);
         }
     }

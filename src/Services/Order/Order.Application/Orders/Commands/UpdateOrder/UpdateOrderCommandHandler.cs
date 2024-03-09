@@ -1,6 +1,8 @@
-﻿using Order.Application.Core.Errors;
+﻿using MassTransit;
+using Order.Application.Core.Errors;
 using Order.Application.Core.Messaging;
 using Order.Domain.Entities;
+using Shared.Contracts;
 using Shared.Core.Primitives.Result;
 using Shared.Core.Repositories;
 
@@ -11,12 +13,18 @@ namespace Order.Application.Orders.Commands.UpdateOrder
         private readonly IRepository<Domain.Entities.Order> _orderRepository;
         private readonly IRepository<Product> _productRepository;
         private readonly IRepository<Address> _addressRepository;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public UpdateOrderCommandHandler(IRepository<Domain.Entities.Order> orderRepository, IRepository<Product> productRepository, IRepository<Address> addressRepository)
+        public UpdateOrderCommandHandler(
+            IRepository<Domain.Entities.Order> orderRepository, 
+            IRepository<Product> productRepository, 
+            IRepository<Address> addressRepository,
+            IPublishEndpoint publishEndpoint)
         {
             _orderRepository = orderRepository;
             _productRepository = productRepository;
             _addressRepository = addressRepository;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task<Result<bool>> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
@@ -58,6 +66,14 @@ namespace Order.Application.Orders.Commands.UpdateOrder
             order.Status = request.Status;
 
             await _orderRepository.UpdateAsync(order);
+            await _publishEndpoint.Publish(new AuditLogCreated
+            {
+                Id = Guid.NewGuid(),
+                OrderId = order.Id,
+                Action = Shared.Contracts.Action.Update,
+                Date = DateTime.UtcNow,
+                Message = "The order updated."
+            });
             return Result<bool>.Success(true);
         }
     }
