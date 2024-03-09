@@ -28,8 +28,9 @@ namespace Audit.Consumer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Action")
-                        .HasColumnType("integer");
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");

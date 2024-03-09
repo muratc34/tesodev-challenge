@@ -17,7 +17,7 @@ namespace Audit.Consumer.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     OrderId = table.Column<Guid>(type: "uuid", nullable: true),
-                    Action = table.Column<int>(type: "integer", nullable: false),
+                    Action = table.Column<string>(type: "text", nullable: false),
                     Message = table.Column<string>(type: "text", nullable: false),
                     Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },

@@ -1,6 +1,6 @@
 ﻿namespace Shared.Contracts
 {
-    public sealed class AuditLog
+    public sealed class AuditLogCreated
     {
         public Guid Id { get; set; }
         public Guid? OrderId { get; set; }

@@ -14,8 +14,14 @@ namespace Audit.Consumer
             while (!stoppingToken.IsCancellationRequested)
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                await SendMailAsync();
                 await Task.Delay(TimeSpan.FromHours(24), stoppingToken);
             }
+        }
+
+        private async Task SendMailAsync()
+        {
+            
         }
     }
 }

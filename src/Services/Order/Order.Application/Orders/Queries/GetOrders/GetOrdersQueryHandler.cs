@@ -38,7 +38,7 @@ namespace Order.Application.Orders.Queries.GetOrders
                     order.Address));
             }
 
-            await _publishEndpoint.Publish(new AuditLog
+            await _publishEndpoint.Publish(new AuditLogCreated
             {
                 Id = Guid.NewGuid(),
                 OrderId = null,

@@ -59,7 +59,7 @@ namespace Order.Application.Orders.Commands.CreateOrder
 
             var data = new Domain.Entities.Order(request.CustomerId, request.Quantity, request.Price, request.Status, product.Id, json.Data.Address.Id);
             await _orderRepository.CreateAsync(data);
-            await _publishEndpoint.Publish(new Shared.Contracts.AuditLog
+            await _publishEndpoint.Publish(new Shared.Contracts.AuditLogCreated
             {
                 Id = Guid.NewGuid(),
                 OrderId = data.Id,

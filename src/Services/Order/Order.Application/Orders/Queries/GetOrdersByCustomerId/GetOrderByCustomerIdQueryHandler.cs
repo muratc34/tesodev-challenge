@@ -1,6 +1,5 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using Order.Application.Contracts;
 using Order.Application.Core.Messaging;
 using Shared.Contracts;
 using Shared.Core.Primitives.Result;
@@ -39,7 +38,7 @@ namespace Order.Application.Orders.Queries.GetOrdersByCustomerId
                     order.Address));
             }
 
-            await _publishEndpoint.Publish(new AuditLog
+            await _publishEndpoint.Publish(new AuditLogCreated
             {
                 Id = Guid.NewGuid(),
                 OrderId = null,

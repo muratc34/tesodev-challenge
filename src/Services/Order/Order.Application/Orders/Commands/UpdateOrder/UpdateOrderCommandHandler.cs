@@ -1,5 +1,4 @@
 ﻿using MassTransit;
-using Order.Application.Contracts;
 using Order.Application.Core.Errors;
 using Order.Application.Core.Messaging;
 using Order.Domain.Entities;
@@ -67,7 +66,7 @@ namespace Order.Application.Orders.Commands.UpdateOrder
             order.Status = request.Status;
 
             await _orderRepository.UpdateAsync(order);
-            await _publishEndpoint.Publish(new AuditLog
+            await _publishEndpoint.Publish(new AuditLogCreated
             {
                 Id = Guid.NewGuid(),
                 OrderId = order.Id,

@@ -1,5 +1,4 @@
 ﻿using MassTransit;
-using Order.Application.Contracts;
 using Order.Application.Core.Errors;
 using Order.Application.Core.Messaging;
 using Shared.Contracts;
@@ -26,7 +25,7 @@ namespace Order.Application.Orders.Commands.DeleteOrder
                 return Result<bool>.Failure(ErrorMessages.Order.NotExist, false);
 
             await _orderRepository.DeleteAsync(order);
-            await _publishEndpoint.Publish(new AuditLog
+            await _publishEndpoint.Publish(new AuditLogCreated
             {
                 Id = Guid.NewGuid(),
                 OrderId = order.Id,

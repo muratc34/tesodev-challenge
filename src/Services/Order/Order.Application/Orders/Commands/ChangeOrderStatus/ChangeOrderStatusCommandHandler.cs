@@ -32,7 +32,7 @@ namespace Order.Application.Orders.Commands.ChangeOrderStatus
 
             order.Status = result;
             await _orderRepository.UpdateAsync(order);
-            await _publishEndpoint.Publish(new AuditLog
+            await _publishEndpoint.Publish(new AuditLogCreated
             {
                 Id = Guid.NewGuid(),
                 OrderId = order.Id,

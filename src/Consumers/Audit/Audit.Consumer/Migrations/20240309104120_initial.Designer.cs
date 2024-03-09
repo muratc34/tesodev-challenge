@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Audit.Consumer.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240308172041_initial")]
+    [Migration("20240309104120_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -31,8 +31,9 @@ namespace Audit.Consumer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Action")
-                        .HasColumnType("integer");
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");

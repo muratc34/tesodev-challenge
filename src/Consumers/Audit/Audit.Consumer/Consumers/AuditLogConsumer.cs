@@ -1,10 +1,11 @@
 ﻿using Audit.Consumer.Context;
+using Audit.Consumer.Models;
 using MassTransit;
 using Shared.Contracts;
 
 namespace Audit.Consumer.Consumers
 {
-    public class AuditLogConsumer : IConsumer<AuditLog>
+    public class AuditLogConsumer : IConsumer<AuditLogCreated>
     {
         private readonly DatabaseContext _databaseContext;
 
@@ -13,24 +14,16 @@ namespace Audit.Consumer.Consumers
             _databaseContext = databaseContext;
         }
 
-        public async Task Consume(ConsumeContext<AuditLog> context)
+        public async Task Consume(ConsumeContext<AuditLogCreated> context)
         {
-            var newAuditLog = new AuditLog()
-            {
-               Id = context.Message.Id, 
-               OrderId = context.Message.OrderId, 
-               Action = context.Message.Action, 
-               Message = context.Message.Message, 
-               Date = context.Message.Date
-            };
-            Enum.TryParse(newAuditLog.Action.ToString(), true, out Models.Action result);
-            await _databaseContext.Set<Models.AuditLog>().AddAsync(
-                new Models.AuditLog(
-                    newAuditLog.Id, 
-                    newAuditLog.OrderId, 
-                    result, 
-                    newAuditLog.Message, 
-                    newAuditLog.Date));
+            var data = new AuditLog(
+                    context.Message.Id,
+                    context.Message.OrderId,
+                    context.Message.Action.ToString(),
+                    context.Message.Message,
+                    context.Message.Date);
+
+            await _databaseContext.Set<AuditLog>().AddAsync(data);
             await _databaseContext.SaveChangesAsync();
         }
     }

@@ -7,7 +7,7 @@ namespace Audit.Consumer.Models
         public AuditLog()
         {
         }
-        public AuditLog(Guid id, Guid? orderId, Action action, string message, DateTime date)
+        public AuditLog(Guid id, Guid? orderId, string action, string message, DateTime date)
         {
             Id = id;
             OrderId = orderId;
@@ -18,16 +18,9 @@ namespace Audit.Consumer.Models
         [Key]
         public Guid Id { get; set; }
         public Guid? OrderId { get; set; }
-        public Action Action { get; set; }
+        public string Action { get; set; }
         public string Message { get; set; }
         public DateTime Date { get; set; }
     }
 
-    public enum Action
-    {
-        Create = 0,
-        Update = 1,
-        Delete = 2,
-        Get = 3
-    }
 }
