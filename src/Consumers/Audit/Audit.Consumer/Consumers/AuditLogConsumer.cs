@@ -1,5 +1,5 @@
-﻿using Audit.Consumer.Context;
-using Audit.Consumer.Models;
+﻿using Audit.Consumer.Models;
+using Audit.Consumer.Services;
 using MassTransit;
 using Shared.Contracts;
 
@@ -7,11 +7,11 @@ namespace Audit.Consumer.Consumers
 {
     public class AuditLogConsumer : IConsumer<AuditLogCreated>
     {
-        private readonly DatabaseContext _databaseContext;
+        private readonly IAuditLogService _auditLogService;
 
-        public AuditLogConsumer(DatabaseContext databaseContext)
+        public AuditLogConsumer(IAuditLogService auditLogService)
         {
-            _databaseContext = databaseContext;
+            _auditLogService = auditLogService;
         }
 
         public async Task Consume(ConsumeContext<AuditLogCreated> context)
@@ -23,8 +23,7 @@ namespace Audit.Consumer.Consumers
                     context.Message.Message,
                     context.Message.Date);
 
-            await _databaseContext.Set<AuditLog>().AddAsync(data);
-            await _databaseContext.SaveChangesAsync();
+            await _auditLogService.CreateAuditLog(data);
         }
     }
 }

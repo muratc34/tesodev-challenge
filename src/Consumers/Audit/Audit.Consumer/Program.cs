@@ -1,6 +1,7 @@
 using Audit.Consumer;
 using Audit.Consumer.Consumers;
 using Audit.Consumer.Context;
+using Audit.Consumer.Services;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,6 +31,8 @@ IHost host = Host.CreateDefaultBuilder(args)
         {
             options.UseNpgsql(configuration.GetConnectionString("Database"));
         });
+
+        services.AddScoped<IAuditLogService, AuditLogService>();
 
         services.AddHostedService<Worker>();
     })
