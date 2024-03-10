@@ -6,7 +6,9 @@ namespace Order.Application.Orders.Commands.UpdateOrder
     {
         public UpdateOrderValidator() 
         {
-
+            RuleFor(x => x.Id)
+                .NotEmpty()
+                .WithMessage("The order id is required.");
         }
     }
 }

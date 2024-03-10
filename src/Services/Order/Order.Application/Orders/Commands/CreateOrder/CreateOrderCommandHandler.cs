@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using Order.Application.Clients;
 using Order.Application.Contracts;
 using Order.Application.Core.Errors;
 using Order.Application.Core.Messaging;
@@ -15,38 +16,28 @@ namespace Order.Application.Orders.Commands.CreateOrder
         private readonly IRepository<Product> _productRepository;
         private readonly IRepository<Address> _addressRepository;
         private readonly IPublishEndpoint _publishEndpoint;
-        private readonly HttpClient _httpClient;
+        private readonly ICustomerClient _customerClient;
 
         public CreateOrderCommandHandler(
             IRepository<Domain.Entities.Order> orderRepository, 
             IRepository<Product> productRepository, 
             IRepository<Address> addressRepository, 
-            IHttpClientFactory httpClientFactory,
-            IPublishEndpoint publishEndpoint)
+            IPublishEndpoint publishEndpoint,
+            ICustomerClient customerClient)
         {
             _orderRepository = orderRepository;
             _productRepository = productRepository;
             _addressRepository = addressRepository;
-            _httpClient = httpClientFactory.CreateClient();
             _publishEndpoint = publishEndpoint;
+            _customerClient = customerClient;
         }
 
         public async Task<Result<Guid>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
-            var customerReponse = await _httpClient.SendAsync(new HttpRequestMessage
-            {
-                RequestUri = new Uri($"http://apigateway:80/customer/{request.CustomerId}"),
-                Method = HttpMethod.Get,
-            });
+            var json = await _customerClient.GetCustomerById(request.CustomerId);
 
-            if (!customerReponse.IsSuccessStatusCode)
-                return Result<Guid>.Failure(ErrorMessages.Order.NotExist, Guid.Empty);
-
-            var str = await customerReponse.Content.ReadAsStringAsync(cancellationToken);
-            var json = JsonSerializer.Deserialize<ResponseData>(str);
-
-            if (json.Error is not null)
-                return Result<Guid>.Failure(json.Error, Guid.Empty);
+            if (json is null)
+                return Result<Guid>.Failure(ErrorMessages.General.UnProcessableRequest, Guid.Empty);
 
             var existAdress = await _addressRepository.GetAsync(x => x.Id == json.Data.Address.Id);
             if (existAdress is null)

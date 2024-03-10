@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Order.Application.Contracts
 {
-    public class ResponseData
+    public class ResponseCustomerData
     {
         [JsonPropertyName("isSuccess")]
         public bool IsSuccess { get; set; }
