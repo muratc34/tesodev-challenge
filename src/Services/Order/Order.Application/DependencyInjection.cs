@@ -3,6 +3,7 @@ using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Order.Application.Clients;
 using Order.Application.Core.Behaviours;
 using System.Reflection;
 
@@ -12,6 +13,8 @@ namespace Order.Application
     {
         public static void AddApplication(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped<ICustomerClient, CustomerClient>();
+
             services.AddHttpClient();
 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());

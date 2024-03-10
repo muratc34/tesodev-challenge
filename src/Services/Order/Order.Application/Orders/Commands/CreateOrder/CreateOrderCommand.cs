@@ -9,6 +9,6 @@ namespace Order.Application.Orders.Commands.CreateOrder
         int Quantity, 
         double Price, 
         Status Status,
-        AddressCreateDto? Address,
-        ProductCreateDto? Product) : ICommand<Guid>;
+        AddressCreateDto Address,
+        ProductCreateDto Product) : ICommand<Guid>;
 }

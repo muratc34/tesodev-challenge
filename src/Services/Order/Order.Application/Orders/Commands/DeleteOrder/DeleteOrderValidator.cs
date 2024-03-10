@@ -6,7 +6,9 @@ namespace Order.Application.Orders.Commands.DeleteOrder
     {
         public DeleteOrderValidator()
         {
-
+            RuleFor(x => x.OrderId)
+                .NotNull()
+                .WithMessage("The orderId can not be null.");
         }
     }
 }
