@@ -6,9 +6,9 @@ namespace Order.Application.Orders.Commands.UpdateOrder
 {
     public sealed record UpdateOrderCommand(
         Guid Id,
-        int Quantity,
-        double Price,
-        Status Status,
+        int? Quantity,
+        double? Price,
+        Status? Status,
         AddressUpdateDto? Address,
         ProductUpdateDto? Product) : ICommand<bool>;
 }

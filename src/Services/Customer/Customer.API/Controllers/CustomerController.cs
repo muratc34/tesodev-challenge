@@ -43,22 +43,25 @@ namespace Customer.API.Controllers
         [Route("{customerId}")]
         [ProducesResponseType(typeof(Result<bool>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Update(Guid customerId, CustomerCreateDto customerDto)
+        public async Task<IActionResult> Update(CustomerUpdateDto customerDto)
         {
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            return Ok(await _customerService.UpdateCustomer(customerId, customerDto));
+            return Ok(await _customerService.UpdateCustomer(customerDto));
         }
 
         [HttpDelete]
         [Route("{customerId}")]
         [ProducesResponseType(typeof(Result<bool>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(Guid customerId)
-            => Ok(await _customerService.DeleteCustomer(customerId));
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return Ok(await _customerService.DeleteCustomer(customerId));
+        }
 
         [HttpGet]
         [Route("validate/{customerId}")]
