@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace Customer.Application.ValidationRules
 {
-    public class CustomerCreateValidator : AbstractValidator<CustomerCreateDto>
+    public class CreateCustomerValidator : AbstractValidator<CustomerCreateDto>
     {
-        public CustomerCreateValidator()
+        public CreateCustomerValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty()
@@ -15,7 +15,7 @@ namespace Customer.Application.ValidationRules
 
             RuleFor(x => x.Email)
                 .NotEmpty()
-                .WithMessage("The email is required")
+                .WithMessage("The email is required.")
                 .MaximumLength(250)
                 .WithMessage("The name is longer than allowed.")
                 .Matches(@"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$")
@@ -23,19 +23,19 @@ namespace Customer.Application.ValidationRules
 
             RuleFor(x => x.Address.AddressLine)
                 .NotEmpty()
-                .WithMessage("The address line is required");
+                .WithMessage("The address line is required.");
 
             RuleFor(x => x.Address.City)
                 .NotEmpty()
-                .WithMessage("The city is required");
+                .WithMessage("The city is required.");
 
             RuleFor(x => x.Address.Country)
                 .NotEmpty()
-                .WithMessage("The country is required");
+                .WithMessage("The country is required.");
 
             RuleFor(x => x.Address.CityCode)
-                .NotEmpty()
-                .WithMessage("The city code is required");
+                .GreaterThan(0)
+                .WithMessage("The city code must be greater than 0.");
         }
     }
 }

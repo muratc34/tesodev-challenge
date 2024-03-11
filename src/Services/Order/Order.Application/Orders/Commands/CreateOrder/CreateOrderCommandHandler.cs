@@ -1,16 +1,14 @@
 ﻿using MassTransit;
 using Order.Application.Clients;
-using Order.Application.Contracts;
 using Order.Application.Core.Errors;
 using Order.Application.Core.Messaging;
 using Order.Domain.Entities;
 using Shared.Core.Primitives.Result;
 using Shared.Core.Repositories;
-using System.Text.Json;
 
 namespace Order.Application.Orders.Commands.CreateOrder
 {
-    internal sealed class CreateOrderCommandHandler : ICommandHandler<CreateOrderCommand, Guid>
+    public sealed class CreateOrderCommandHandler : ICommandHandler<CreateOrderCommand, Guid>
     {
         private readonly IRepository<Domain.Entities.Order> _orderRepository;
         private readonly IRepository<Product> _productRepository;

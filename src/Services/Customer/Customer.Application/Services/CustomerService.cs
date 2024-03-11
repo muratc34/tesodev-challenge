@@ -11,7 +11,7 @@ namespace Customer.Application.Services
     {
         Task<Result<Guid>> CreateCustomer(CustomerCreateDto customerDto);
         Task<Result<bool>> DeleteCustomer(Guid customerId);
-        Task<Result<bool>> UpdateCustomer(Guid id, CustomerCreateDto customerDto);
+        Task<Result<bool>> UpdateCustomer(CustomerUpdateDto customerDto);
         Task<Result<List<CustomerDetailDto>>> Get(CancellationToken cancellationToken);
         Task<Result<CustomerDetailDto>> Get(Guid customerId);
         Task<Result<bool>> Validate(Guid customerId);
@@ -77,25 +77,37 @@ namespace Customer.Application.Services
             return Result<CustomerDetailDto>.Success(mapData);
         }
 
-        public async Task<Result<bool>> UpdateCustomer(Guid customerId, CustomerCreateDto customerDto)
+        public async Task<Result<bool>> UpdateCustomer(CustomerUpdateDto customerDto)
         {
-            var existData = await _customerRepository.GetAsync(c => c.Id == customerId);
-            if (existData is null)
+            var existCustomerData = await _customerRepository.GetAsync(c => c.Id == customerDto.CustomerId);
+            if (existCustomerData is null)
                 return Result<bool>.Failure(ErrorMessages.Customer.NotExist, false);
 
-            existData.Email = customerDto.Email;
-            existData.Name = customerDto.Name;
+            existCustomerData.UpdatedAt = DateTime.UtcNow;
+            if (customerDto.Email is not null)
+                existCustomerData.Email = customerDto.Email;
+            if(customerDto.Name is not null)
+                existCustomerData.Name = customerDto.Name;
 
-            if (existData.Address is not null)
+            if (customerDto.Address is not null)
             {
-                existData.Address.AddressLine = customerDto.Address.AddressLine;
-                existData.Address.City = customerDto.Address.City;
-                existData.Address.Country = customerDto.Address.Country;
-                existData.Address.CityCode = customerDto.Address.CityCode;
-                existData.UpdatedAt = DateTime.UtcNow;
+                var existAddressData = await _addressRepository.GetAsync(c => c.Id == existCustomerData.Address.Id);
+
+                if (existCustomerData.Address is not null)
+                {
+                    if (customerDto.Address.AddressLine is not null)
+                        existCustomerData.Address.AddressLine = customerDto.Address.AddressLine;
+                    if(customerDto.Address.City is not null)
+                        existCustomerData.Address.City = customerDto.Address.City;
+                    if (customerDto.Address.Country is not null)
+                        existCustomerData.Address.Country = customerDto.Address.Country;
+                    if (customerDto.Address.CityCode is not null)
+                        existCustomerData.Address.CityCode = (int)customerDto.Address.CityCode;
+                }
+                await _addressRepository.UpdateAsync(existCustomerData.Address);
             }
 
-            await _customerRepository.UpdateAsync(existData);
+            await _customerRepository.UpdateAsync(existCustomerData);
 
             return Result<bool>.Success(true);
         }

@@ -8,7 +8,7 @@ using Shared.Core.Repositories;
 
 namespace Order.Application.Orders.Commands.UpdateOrder
 {
-    internal sealed class UpdateOrderCommandHandler : ICommandHandler<UpdateOrderCommand, bool>
+    public sealed class UpdateOrderCommandHandler : ICommandHandler<UpdateOrderCommand, bool>
     {
         private readonly IRepository<Domain.Entities.Order> _orderRepository;
         private readonly IRepository<Product> _productRepository;
@@ -35,35 +35,40 @@ namespace Order.Application.Orders.Commands.UpdateOrder
 
             if (request.Address is not null)
             {
-                var address = await _addressRepository.GetAsync(x => x.Id == request.Address.AddressId);
+                var address = await _addressRepository.GetAsync(x => x.Id == order.Address.Id);
                 if (address is null)
                     return Result<bool>.Failure(ErrorMessages.Address.NotExist, false);
 
-                address.AddressLine = request.Address.AddressLine;
-                address.Country = request.Address.Country;
-                address.City = request.Address.City;
-                address.CityCode = request.Address.CityCode;
+                if(request.Address.AddressLine is not null)
+                    address.AddressLine = request.Address.AddressLine;
+                if (request.Address.Country is not null)
+                    address.Country = request.Address.Country;
+                if (request.Address.City is not null)
+                    address.City = request.Address.City;
+                if (request.Address.CityCode is not null)
+                    address.CityCode = (int)request.Address.CityCode;
                 await _addressRepository.UpdateAsync(address);
-
-                order.AddressId = address.Id;
             }
 
             if (request.Product is not null)
             {
-                var product = await _productRepository.GetAsync(x => x.Id == request.Product.ProductId);
+                var product = await _productRepository.GetAsync(x => x.Id == order.Product.Id);
                 if (product is null)
                     return Result<bool>.Failure(ErrorMessages.Product.NotExist, false);
 
-                product.ImageUrl = request.Product.ImageUrl;
-                product.Name = request.Product.Name;
+                if(request.Product.ImageUrl is not null)
+                    product.ImageUrl = request.Product.ImageUrl;
+                if (request.Product.Name is not null)
+                    product.Name = request.Product.Name;
                 await _productRepository.UpdateAsync(product);
-
-                order.ProductId = product.Id;
             }
 
-            order.Quantity = request.Quantity;
-            order.Price = request.Price;
-            order.Status = request.Status;
+            if (request.Quantity is not null)
+                order.Quantity = (int)request.Quantity;
+            if (request.Price is not null)
+                order.Price = (double)request.Price;
+            if(request.Status is not null)
+                order.Status = (Domain.Enumerations.Status)request.Status;
 
             await _orderRepository.UpdateAsync(order);
             await _publishEndpoint.Publish(new AuditLogCreated

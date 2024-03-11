@@ -18,6 +18,8 @@ namespace Order.Application.Orders.Commands.CreateOrder
                 .GreaterThan(0)
                 .WithMessage("The price must be greater than 0.");
 
+            RuleFor(x => x.Address);
+
             RuleFor(x => x.Address.AddressLine)
                 .NotEmpty()
                 .WithMessage("The address line is required.");

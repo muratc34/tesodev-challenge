@@ -9,6 +9,7 @@ namespace Order.Application.Orders.Commands.UpdateOrder
             RuleFor(x => x.Id)
                 .NotEmpty()
                 .WithMessage("The order id is required.");
+
         }
     }
 }
