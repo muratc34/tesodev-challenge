@@ -8,7 +8,7 @@ using Shared.Core.Repositories;
 
 namespace Order.Application.Orders.Commands.UpdateOrder
 {
-    internal sealed class UpdateOrderCommandHandler : ICommandHandler<UpdateOrderCommand, bool>
+    public sealed class UpdateOrderCommandHandler : ICommandHandler<UpdateOrderCommand, bool>
     {
         private readonly IRepository<Domain.Entities.Order> _orderRepository;
         private readonly IRepository<Product> _productRepository;
