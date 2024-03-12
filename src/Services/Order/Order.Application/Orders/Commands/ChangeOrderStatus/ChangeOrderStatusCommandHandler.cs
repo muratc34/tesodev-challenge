@@ -22,7 +22,7 @@ namespace Order.Application.Orders.Commands.ChangeOrderStatus
 
         public async Task<Result<bool>> Handle(ChangeOrderStatusCommand request, CancellationToken cancellationToken)
         {
-            var order = await _orderRepository.GetAsync(x => x.Id == request.CustomerId);
+            var order = await _orderRepository.GetAsync(x => x.Id == request.OrderId);
             if(order is null)
                 return Result<bool>.Failure(ErrorMessages.Order.NotExist, false);
 

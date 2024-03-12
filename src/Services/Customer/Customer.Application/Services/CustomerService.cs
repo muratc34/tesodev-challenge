@@ -91,7 +91,7 @@ namespace Customer.Application.Services
 
             if (customerDto.Address is not null)
             {
-                var existAddressData = await _addressRepository.GetAsync(c => c.Id == existCustomerData.Address.Id);
+                var existAddressData = await _addressRepository.GetAsync(c => c.Id == existCustomerData.AddressId);
 
                 if (existCustomerData.Address is not null)
                 {
@@ -108,7 +108,6 @@ namespace Customer.Application.Services
             }
 
             await _customerRepository.UpdateAsync(existCustomerData);
-
             return Result<bool>.Success(true);
         }
          
