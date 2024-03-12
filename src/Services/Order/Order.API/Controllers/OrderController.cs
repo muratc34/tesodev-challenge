@@ -76,7 +76,6 @@ namespace Order.API.Controllers
         }
 
         [HttpPut]
-        [Route("{orderId}")]
         [ProducesResponseType(typeof(Result<bool>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateOrder(UpdateOrderCommand command)
@@ -86,7 +85,7 @@ namespace Order.API.Controllers
         }
 
         [HttpPut]
-        [Route("{orderId}/changestatus")]
+        [Route("changestatus")]
         [ProducesResponseType(typeof(Result<bool>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ChangeStatus(ChangeOrderStatusCommand command)
