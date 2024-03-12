@@ -2,5 +2,5 @@
 
 namespace Order.Application.Orders.Commands.ChangeOrderStatus
 {
-    public sealed record ChangeOrderStatusCommand(Guid CustomerId, string Status) : ICommand<bool>;
+    public sealed record ChangeOrderStatusCommand(Guid OrderId, string Status) : ICommand<bool>;
 }
