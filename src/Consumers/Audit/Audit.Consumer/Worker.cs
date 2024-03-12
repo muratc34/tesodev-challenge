@@ -15,12 +15,19 @@ namespace Audit.Consumer
         {
             while (!stoppingToken.IsCancellationRequested)
             {
+                var scheduledTime = new TimeSpan(0, 0, 0);
+                var delay = scheduledTime - DateTime.Now.TimeOfDay;
+                if (delay < TimeSpan.Zero)
+                {
+                    delay = TimeSpan.FromDays(1) + delay;
+                }
+
                 using var scope = _serviceProvider.CreateScope();
                 var services = scope.ServiceProvider;
                 var context = services.GetRequiredService<IAuditLogService>();
 
                 await context.SendMailAsync();
-                await Task.Delay(TimeSpan.FromHours(24), stoppingToken);
+                await Task.Delay(delay, stoppingToken);
             }
         }
     }
