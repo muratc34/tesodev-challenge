@@ -30,7 +30,7 @@ namespace Audit.Consumer.Services
             => await _databaseContext
                 .Set<AuditLog>()
                 .AsNoTracking()
-                .Where(x => x.Date >= DateTime.UtcNow.Date && x.Date < DateTime.UtcNow.Date.AddDays(1))
+                .Where(x => x.Date >= DateTime.UtcNow.Date.AddDays(-1) && x.Date < DateTime.UtcNow.Date)
                 .ToListAsync();
 
         public async Task CreateAuditLog(AuditLog auditLog)
