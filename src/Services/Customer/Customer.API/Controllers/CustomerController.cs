@@ -40,7 +40,6 @@ namespace Customer.API.Controllers
         }
 
         [HttpPut]
-        [Route("{customerId}")]
         [ProducesResponseType(typeof(Result<bool>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(CustomerUpdateDto customerDto)
@@ -64,7 +63,7 @@ namespace Customer.API.Controllers
         }
 
         [HttpGet]
-        [Route("validate/{customerId}")]
+        [Route("validate")]
         [ProducesResponseType(typeof(Result<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> Validate(Guid customerId)
             => Ok(await _customerService.Validate(customerId));
