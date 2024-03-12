@@ -11,7 +11,7 @@
       "SwaggerKey": "customer",
       "DownstreamPathTemplate": "/api/Customer",
       "UpstreamPathTemplate": "/customer",
-      "UpstreamHttpMethod": [ "POST", "GET" ]
+      "UpstreamHttpMethod": [ "POST", "GET", "PUT" ]
     },
     {
       "DownstreamScheme": "http",
@@ -24,7 +24,7 @@
       "SwaggerKey": "customer",
       "DownstreamPathTemplate": "/api/Customer/{customerId}",
       "UpstreamPathTemplate": "/customer/{customerId}",
-      "UpstreamHttpMethod": [ "PUT", "DELETE", "GET" ]
+      "UpstreamHttpMethod": [ "DELETE", "GET" ]
     },
     {
       "DownstreamScheme": "http",
@@ -35,8 +35,8 @@
         }
       ],
       "SwaggerKey": "customer",
-      "DownstreamPathTemplate": "/api/Customer/validate/{customerId}",
-      "UpstreamPathTemplate": "/customer/validate/{customerId}",
+      "DownstreamPathTemplate": "/api/Customer/validate",
+      "UpstreamPathTemplate": "/customer/validate",
       "UpstreamHttpMethod": [ "GET" ]
     },
     {
@@ -50,7 +50,7 @@
       "SwaggerKey": "order",
       "DownstreamPathTemplate": "/api/Order",
       "UpstreamPathTemplate": "/order",
-      "UpstreamHttpMethod": [ "GET", "POST" ]
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ]
     },
     {
       "DownstreamScheme": "http",
@@ -63,7 +63,7 @@
       "SwaggerKey": "order",
       "DownstreamPathTemplate": "/api/Order/{orderId}",
       "UpstreamPathTemplate": "/order/{orderId}",
-      "UpstreamHttpMethod": [ "GET", "DELETE", "PUT" ]
+      "UpstreamHttpMethod": [ "GET", "DELETE"  ]
     },
     {
       "DownstreamScheme": "http",
@@ -87,8 +87,8 @@
         }
       ],
       "SwaggerKey": "order",
-      "DownstreamPathTemplate": "/api/Order/{orderId}/changestatus",
-      "UpstreamPathTemplate": "/order/{orderId}/changestatus",
+      "DownstreamPathTemplate": "/api/Order/changestatus",
+      "UpstreamPathTemplate": "/order/changestatus",
       "UpstreamHttpMethod": [ "PUT" ]
     }
   ]
