@@ -28,7 +28,7 @@ jobs:
         run: dotnet build ./src/Services/Customer/Customer.API/Customer.API.csproj --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test ./src/Services/Customer/Customer.API/Customer.API.csproj --configuration Release --no-restore --no-build
+        run: dotnet test ./tests/Customer.UnitTests/Customer.UnitTests.csproj --configuration Release --no-restore --no-build
       # Order
       - name: Restore
         run: dotnet restore ./src/Services/Order/Order.API/Order.API.csproj
@@ -37,7 +37,7 @@ jobs:
         run: dotnet build ./src/Services/Order/Order.API/Order.API.csproj --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test ./src/Services/Order/Order.API/Order.API.csproj --configuration Release --no-restore --no-build
+        run: dotnet test ./tests/Order.UnitTests/Order.UnitTests.csproj --configuration Release --no-restore --no-build
       # Gateway
       - name: Restore
         run: dotnet restore ./src/Gateway/APIGateway/APIGateway.csproj
