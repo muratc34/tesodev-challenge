@@ -27,20 +27,19 @@ jobs:
       - name: Customer Build
         run: dotnet build ./src/Services/Customer/Customer.API/Customer.API.csproj --configuration Release --no-restore
 
-      # - name: Customer Test
-      #   run: dotnet test ./tests/Customer.UnitTests/Customer.UnitTests.csproj --configuration Release --no-restore --no-build
       # Order
       - name: Order Restore
         run: dotnet restore ./src/Services/Order/Order.API/Order.API.csproj
 
       - name: Order Build
         run: dotnet build ./src/Services/Order/Order.API/Order.API.csproj --configuration Release --no-restore
-
-      # - name: Order Test
-      #   run: dotnet test ./tests/Order.UnitTests/Order.UnitTests.csproj --configuration Release --no-restore --no-build
+        
       # Gateway
       - name: Gateway Restore
         run: dotnet restore ./src/Gateway/APIGateway/APIGateway.csproj
 
       - name: Gateway Build
         run: dotnet build ./src/Gateway/APIGateway/APIGateway.csproj --configuration Release --no-restore
+        
+      - name: Unit Tests
+        run: dotnet test ./TesodevChallenge.sln --configuration Release
